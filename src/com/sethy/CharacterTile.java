@@ -1,10 +1,34 @@
 package com.sethy;
 
+import java.util.HashMap;
+
+import static java.lang.Character.toUpperCase;
+
 public class CharacterTile extends Tile {
     protected char symbol;
 
+    private static HashMap<Character, Character> EtC = new HashMap<>();
+
+
+
     public CharacterTile(char symbol){
-        this.symbol = symbol;
+        EtC.put('1','\u4E00');
+        EtC.put('2','\u4E8C');
+        EtC.put('3','\u4E09');
+        EtC.put('4','\u56DB');
+        EtC.put('5','\u4E94');
+        EtC.put('6','\u516D');
+        EtC.put('7','\u4E03');
+        EtC.put('8','\u516B');
+        EtC.put('9','\u4E5D');
+        EtC.put('N','\u5317');
+        EtC.put('E','\u6771');
+        EtC.put('W','\u897F');
+        EtC.put('S','\u5357');
+        EtC.put('C','\u4E2D');
+        EtC.put('F','\u767C');
+
+        this.symbol = toUpperCase(symbol);
     }
 
     @Override
@@ -32,6 +56,13 @@ public class CharacterTile extends Tile {
                 return "Character " + symbol;
         }
     }
+
+    public String  toChinese(){
+        return EtC.get(toUpperCase(symbol)).toString();
+    }
+
+
+
 
     @Override
     public boolean matches(Tile other){
