@@ -7,10 +7,25 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 
-public class Main {
+public class Main extends JFrame{
 
 
-    public static void characterTest()
+    public static void main(String[] args)
+    {
+        new Lab5();
+        /*JFrame	frame = new JFrame();
+
+        frame.setLayout(new FlowLayout());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("Tile");
+
+        frame.add(new Tile());
+
+        frame.pack();
+        frame.setVisible(true);*/
+    }
+
+    /*public static void characterTest()
     {
         JTextArea area = new JTextArea();
 
