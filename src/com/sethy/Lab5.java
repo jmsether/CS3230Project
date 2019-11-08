@@ -74,6 +74,8 @@ public class Lab5 extends JFrame
 
         pack();
         setVisible(true);
+
+
     }
 
 

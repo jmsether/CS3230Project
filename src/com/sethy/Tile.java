@@ -2,13 +2,18 @@ package com.sethy;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
+import java.util.Arrays;
 
 public class Tile extends JPanel {
-    private static final int RECT_WIDTH = 80;
-    private static final int RECT_HEIGHT = RECT_WIDTH;
-    private static final int RECT_X = RECT_WIDTH/5;
-    private static final int RECT_Y = RECT_X;
-    private static final int offset = 1;
+    private static  int RECT_WIDTH = 80;
+    private static  int RECT_HEIGHT = RECT_WIDTH;
+    private static  int RECT_X = RECT_WIDTH/5;
+    private static  int RECT_Y = RECT_X;
+    private static  int offset = 1;
     private static Dimension      SIZE;
     private static Polygon        SIDE;
     private static Polygon       SIDE2;
@@ -19,16 +24,38 @@ public class Tile extends JPanel {
     private static GradientPaint GRAD1;
     private static GradientPaint GRAD2;
 
-    static private int[] modifyArray(int[] x, int y){
-        for(int i = 0; i< x.length; i++){
-            x[i] += y;
+    static protected int[] modifyArray(int[]x, int y){
+        int[] xCopy = Arrays.copyOf(x, x.length);
+        for(int i = 0; i< xCopy.length; i++){
+            xCopy[i] += y;
         }
 
-        return x;
+        return xCopy;
     }
 
 
-    static{
+    public void resize(int size){
+        RECT_WIDTH = size;
+        RECT_HEIGHT = RECT_WIDTH;
+        RECT_X = RECT_WIDTH/5;
+        RECT_Y = RECT_X;
+        System.out.println("resized to: "+size);
+        iSize();
+        getPreferredSize();
+        repaint();
+
+    }
+
+    public Tile(){
+        iSize();
+        addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                //resize(e.getComponent().getWidth());
+            }
+        });
+    }
+
+    private void iSize(){
         SIZE = new Dimension(121, 121);
         int[] x = { RECT_WIDTH/10, RECT_WIDTH/5, RECT_WIDTH/5, RECT_WIDTH/10 };
         int[] y = { RECT_HEIGHT/10, 0, RECT_HEIGHT, (int)(RECT_WIDTH*1.1)};
@@ -42,6 +69,8 @@ public class Tile extends JPanel {
         GRAD0 = new GradientPaint(20, 100, Color.darkGray, 120, 0, Color.lightGray);
         GRAD1 = new GradientPaint(20, 100, Color.lightGray, 120, 0, Color.DARK_GRAY);
         GRAD2 = new GradientPaint(10, 110, Color.darkGray, 20, 0, Color.lightGray);
+
+
     }
 
 
@@ -83,6 +112,14 @@ public class Tile extends JPanel {
     public Dimension getPreferredSize() {
         // so that our GUI is big enough
         return new Dimension(RECT_WIDTH + offset * RECT_X, RECT_HEIGHT + offset * RECT_Y);
+    }
+
+    public int getTileWidth() {
+        return RECT_WIDTH;
+    }
+
+    public int getTileHeight() {
+        return RECT_HEIGHT;
     }
 
     public boolean matches(Tile other){
