@@ -59,6 +59,11 @@ public abstract class RankTile extends Tile {
         setToolTipText(String.valueOf(rank));
     }
 
+    public RankTile(RankTile rankTile){
+        this.rank = rankTile.rank;
+        setToolTipText(String.valueOf(rank));
+    }
+
     private void fillGrid(){
 
     }

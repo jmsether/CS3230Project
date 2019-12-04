@@ -12,7 +12,9 @@ public class Main extends JFrame{
 
     public static void main(String[] args)
     {
-        new Lab5();
+        //new Lab5();
+        //new MahJongTest();
+        new MahJong();
         /*JFrame	frame = new JFrame();
 
         frame.setLayout(new FlowLayout());

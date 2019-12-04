@@ -17,6 +17,7 @@ public class Circle {
         this.color = color;
     }
 
+
     protected void draw(Graphics g2) {
         g2.setColor(color);
         g2.fillOval(x - 2 / 2 -width/10, y - 2 / 2 -width/10, width/5, width/5);
