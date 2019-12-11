@@ -22,7 +22,15 @@ public class Tile extends JPanel {
     private static GradientPaint GRAD1;
     private static GradientPaint GRAD2;
 
+    private Color borderColor = Color.BLACK;
+    private int strokeWidth = 1;
+
     private boolean render = true;
+    private boolean isSelected = false;
+    private boolean isStart = true;
+    private int sX,sY;
+
+    MahJongModel mahJongModel = null;
 
     static protected int[] modifyArray(int[]x, int y){
         int[] xCopy = Arrays.copyOf(x, x.length);
@@ -33,6 +41,56 @@ public class Tile extends JPanel {
         return xCopy;
     }
 
+    @Override
+    public void setLocation(int x,int y){
+        if(isStart){
+            sX = x;
+            sY = y;
+            isStart = false;
+        }
+        super.setLocation(x,y);
+    }
+
+
+    public void setToSart(){
+        setLocation(sX,sY);
+    }
+
+    public void setVisibility(boolean x){
+        setVisible(x);
+        render = x;
+        repaint();
+    }
+
+    public void disableLogic(){
+        render = false;
+    }
+
+    public boolean isEnabled(){
+        return render;
+    }
+
+
+    public void hintHighlight(){
+        borderColor = Color.MAGENTA;
+        strokeWidth = 5;
+        //highlight(false);
+        repaint();
+    }
+
+
+    public void highlight(boolean x){
+        if(x){
+            borderColor = Color.green;
+            strokeWidth = 4;
+            isSelected = true;
+        }else{
+            borderColor = Color.black;
+            strokeWidth = 1;
+            isSelected =false;
+        }
+        repaint();
+    }
 
     public void resize(int size){
         RECT_WIDTH = size;
@@ -51,39 +109,10 @@ public class Tile extends JPanel {
 
     }
 
-    public static Tile newInstance(Tile tile){
-        return new Tile(tile);
-    }
 
-
-    public Tile(Tile tile){
-        new Tile();
-        setOpaque(false);
-        iSize();
-        addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent e) {
-                //resize(e.getComponent().getWidth());
-            }
-        });
-        addMouseListener(new MouseAdapter() {
-            private Color background;
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                background = getBackground();
-                setBackground(Color.RED);
-                repaint();
-                System.out.println("Ping");
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                setBackground(background);
-            }
-        });
-    }
 
     public Tile(){
+
         setOpaque(false);
         iSize();
         addComponentListener(new ComponentAdapter() {
@@ -93,19 +122,54 @@ public class Tile extends JPanel {
         });
         addMouseListener(new MouseAdapter() {
             private Color background;
+            private Tile[] tiles = null;
 
             @Override
             public void mousePressed(MouseEvent e) {
                 background = getBackground();
                 setBackground(Color.RED);
-                setVisible(false);
+                //setVisible(false);
+                //highlight(true);
                 repaint();
                 //System.out.println("Ping");
+                mahJongModel = MahJongModel.getInstance();
+                if(mahJongModel != null){
+                    //System.out.println(e.getSource().toString());
+                    if(e.getSource()!= null){
+                        tiles = mahJongModel.getSurounding((Tile) e.getSource());
+                    }
+                    if(tiles != null){
+                        //System.out.println(mahJongModel.isValidMove((Tile) e.getSource()));
+                        /*for (Tile tile : tiles) {
+                            tile.highlight(true);
+
+
+                        }*/
+                        if(mahJongModel.isValidMove((Tile) e.getSource())){
+                            if(isSelected){
+                                highlight(false);
+                                mahJongModel.removeSelection((Tile) e.getSource());
+                            }else{
+                                highlight(true);
+                                mahJongModel.setSelection((Tile) e.getSource());
+                            }
+                        }
+
+                    }
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 setBackground(background);
+                /*highlight(false);
+                if(tiles != null){
+                    for (Tile tile : tiles) {
+                        tile.highlight(false);
+                        //System.out.println(tile);
+
+                    }
+                }*/
             }
         });
     }
@@ -137,6 +201,8 @@ public class Tile extends JPanel {
         //g.drawRect(20, 0, 100, 100);
 
         Graphics2D g2 = (Graphics2D)g;
+        BasicStroke b = new BasicStroke(strokeWidth, BasicStroke.CAP_SQUARE,BasicStroke.JOIN_BEVEL,10);
+        g2.setStroke(b);
         g2.setPaint(GRAD1);
         //setComponentZOrder(this,1);
         g2.fill(SIDE);
@@ -150,16 +216,16 @@ public class Tile extends JPanel {
         //setComponentZOrder(this,1);
         g2.setPaint(GRAD2);
         g2.fill(FACE);
-        g2.setColor(Color.BLACK);
+        g2.setColor(borderColor);
 
         //setComponentZOrder(this,1);
         g2.draw(BOTTOM);
         g2.draw(BOTTOM2);
         g2.draw(SIDE);
         g2.draw(SIDE2);
-        g2.setColor(Color.BLACK);
 
 
+        g2.setColor(borderColor);
         //setComponentZOrder(this,2);
         g2.draw(FACE);
     }

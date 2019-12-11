@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class TileDeck{
     private ArrayList<Tile> deck = new ArrayList<>(144);
+    private ArrayList<Tile> discarded = new ArrayList<>(144);
 
     public TileDeck(){
         for (int i = 0; i < 4; i++){
@@ -59,8 +60,18 @@ public class TileDeck{
         Collections.shuffle(deck, new Random(gameNumber));
     }
 
+    public void reShuffle(){
+        for (int i = discarded.size()-1; i >= 0; i--) {
+            deck.add(discarded.get(i));
+        }
+        for (int i = 0; i < discarded.size(); i++) {
+            discarded.remove(discarded.size()-1);
+        }
+    }
+
     public Tile deal(){
         if(deck.size() > 0){
+            discarded.add(deck.get(deck.size()-1));
             return deck.remove(deck.size()-1);
         }else{
             return null;
