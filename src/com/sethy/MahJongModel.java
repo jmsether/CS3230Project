@@ -160,6 +160,7 @@ public class MahJongModel {
                 for (int i = 0; i < sideQue.length; i++) {
                     if(sideQue[i] != null){
                         sideQue[i].setLocation(jPanelInstance.getWidth()-(int)(tileSize*1.2),10+(i*(int)(tileSize*1.3)));
+                        sideQue[i].highlight(false);
                         sideQue[i].setVisible(true);
                         jPanelInstance.repaint();
                     }

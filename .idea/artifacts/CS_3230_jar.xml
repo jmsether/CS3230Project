@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="CS 3230:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/CS_3230_jar</output-path>
-    <root id="archive" name="CS 3230.jar">
-      <element id="module-output" name="CS 3230" />
-    </root>
-  </artifact>
-</component>
